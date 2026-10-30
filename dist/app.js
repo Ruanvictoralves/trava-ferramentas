@@ -53,8 +53,8 @@ function render() {
   $('state-badge').textContent = !known ? 'ESTADO DESCONHECIDO' : !live ? 'ÚLTIMO ESTADO RECEBIDO' : unlocked ? 'DESTRAVADA' : 'TRAVADA';
   $('state-badge').className = 'badge' + (live ? unlocked ? ' unlocked' : ' locked' : '');
   $('lock-art').classList.toggle('unlocked', unlocked);
-  $('state-title').textContent = !known ? 'Vamos conectar?' : !live ? 'Aguardando confirmação' : unlocked ? 'Pode retirar sua bike.' : 'Sua bike está travada.';
-  $('state-description').textContent = !known ? 'O estado da trava aparecerá quando o dispositivo responder.' : !live ? 'Último estado: ' + device.state.toLowerCase() + '. Consulte o dispositivo para atualizar.' : unlocked ? 'O fechamento automático continua ativo no ESP32.' : 'O ESP32 confirmou a posição comandada do servo.';
+  $('state-title').textContent = !known ? 'Vamos conectar?' : !live ? 'Aguardando confirmação' : unlocked ? 'Cofre aberto para retirar ferramentas.' : 'Cofre de ferramentas da bike travado.';
+  $('state-description').textContent = !known ? 'O estado da trava do cofre aparecerá quando o dispositivo responder.' : !live ? 'Último estado: ' + device.state.toLowerCase() + '. Consulte o dispositivo para atualizar.' : unlocked ? 'O cofre será travado automaticamente pelo ESP32.' : 'O ESP32 confirmou a posição da trava do cofre.';
   $('lcd-line1').textContent = device.state || 'AGUARDANDO ESP32';
   $('lcd-line2').textContent = live ? unlocked ? 'AUTOFECHO: 10s' : 'MQTT CONECTADO' : known ? 'ULTIMO ESTADO' : 'CONECTE O PAINEL';
   if (lastLive && !live && device.broker) {
@@ -126,7 +126,7 @@ function connect() {
         if (pending && pending.expected === text) {
           const action = pending.command;
           cancelPending();
-          feedback(action === 'DESTRAVAR' ? 'Destravamento confirmado. O ESP32 fechará a trava em aproximadamente 10 segundos.' : 'Travamento confirmado pelo ESP32.');
+          feedback(action === 'DESTRAVAR' ? 'Cofre aberto. O ESP32 travará o cofre em aproximadamente 10 segundos.' : 'Trava do cofre confirmada pelo ESP32.');
         } else if (!pending) feedback('ESP32 respondendo. Você já pode controlar a trava.');
       }
     } else if (text === 'OFFLINE') {

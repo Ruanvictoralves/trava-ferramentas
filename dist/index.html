@@ -3,31 +3,31 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#123f36">
-  <meta name="description" content="Painel de controle da trava de bicicleta com ESP32. Controle a abertura e acompanhe o estado pelo MQTT.">
-  <title>Trava Bike · Controle</title>
+  <meta name="description" content="Painel do cofre de ferramentas da bike com ESP32. Controle a trava do cofre e acompanhe o estado pelo MQTT.">
+  <title>Cofre da Bike · Controle</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./mqtt.min.js" defer></script>
   <script type="module" src="./app.js"></script>
 </head>
 <body>
   <aside class="sidebar">
-    <a class="brand" href="./" aria-label="Trava Bike, início"><span class="brand-icon">↗</span> trava<span>bike</span><small>CONTROLE INTELIGENTE</small></a>
+    <a class="brand" href="./" aria-label="Cofre de ferramentas da bike, início"><span class="brand-icon">↗</span> cofre<span>bike</span><small>COFRE DE FERRAMENTAS</small></a>
     <div class="nav-item"><span>◉</span> Visão geral <span class="nav-arrow">↗</span></div>
-    <div class="sidebar-bottom"><span class="mini-label">SEU PROJETO, CONECTADO</span><p>Uma bicicleta.<br>Três formas de controlar.</p><div class="chips"><span>Web</span><span>Teclado</span><span>App</span></div><small>Protótipo ESP32 · Wokwi</small></div>
+    <div class="sidebar-bottom"><span class="mini-label">SEU PROJETO, CONECTADO</span><p>Um cofre na bike.<br>Três formas de controlar.</p><div class="chips"><span>Web</span><span>Teclado</span><span>App</span></div><small>Protótipo ESP32 · Wokwi</small></div>
   </aside>
   <main>
-    <header><div class="breadcrumb">MEUS DISPOSITIVOS <span>/</span> BICICLETA 01</div><span class="project-tag">PROJETO IoT <span class="dot"></span></span></header>
-    <section class="heading"><div><p class="eyebrow">TUDO SOB CONTROLE</p><h1>Sua bike, por perto.</h1><p class="subheading">Abra, trave e acompanhe sua bicicleta em um só lugar.</p></div><button id="connect" class="button outline">Conectar dispositivo <span>↗</span></button></section>
+    <header><div class="breadcrumb">MEUS DISPOSITIVOS <span>/</span> COFRE DA BIKE</div><span class="project-tag">PROJETO IoT <span class="dot"></span></span></header>
+    <section class="heading"><div><p class="eyebrow">TUDO SOB CONTROLE</p><h1>Ferramentas seguras na bike.</h1><p class="subheading">Trave e acompanhe o cofre de ferramentas da sua bike em um só lugar.</p></div><button id="connect" class="button outline">Conectar dispositivo <span>↗</span></button></section>
     <div class="connection-strip"><span><i id="broker-dot" class="status-dot"></i> <span id="broker-status">Painel desconectado</span></span><span><i id="device-dot" class="status-dot"></i> <span id="device-status">ESP32 sem confirmação</span></span><span id="last-seen">Nenhuma atualização recebida</span></div>
     <div id="feedback" class="feedback" role="status" aria-live="polite">Inicie a simulação no Wokwi e conecte este painel.</div>
     <div class="dashboard">
       <section class="device-card">
-        <div class="card-top"><span class="eyebrow">BICICLETA 01</span><span id="state-badge" class="badge">ESTADO DESCONHECIDO</span></div>
-        <div id="lock-art" class="lock-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><svg viewBox="0 0 220 220"><path class="shackle" d="M73 102V74a37 37 0 0 1 74 0v28"/><rect x="51" y="94" width="118" height="96" rx="24"/><circle class="keyhole" cx="110" cy="133" r="10"/><path class="keyhole-line" d="M110 140v17"/></svg><span class="art-label">TRAVA CONECTADA</span></div>
-        <div class="state-copy"><h2 id="state-title">Vamos conectar?</h2><p id="state-description">O estado da trava aparecerá quando o dispositivo responder.</p></div>
+        <div class="card-top"><span class="eyebrow">COFRE DA BIKE</span><span id="state-badge" class="badge">ESTADO DESCONHECIDO</span></div>
+        <div id="lock-art" class="lock-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><svg viewBox="0 0 220 220"><path class="shackle" d="M73 102V74a37 37 0 0 1 74 0v28"/><rect x="51" y="94" width="118" height="96" rx="24"/><circle class="keyhole" cx="110" cy="133" r="10"/><path class="keyhole-line" d="M110 140v17"/></svg><span class="art-label">COFRE CONECTADO</span></div>
+        <div class="state-copy"><h2 id="state-title">Vamos conectar?</h2><p id="state-description">O estado da trava do cofre aparecerá quando o dispositivo responder.</p></div>
         <div class="device-actions"><button id="unlock" class="button primary" disabled>Destravar <span>↗</span></button><button id="lock" class="button outline" disabled>Travar <span>⌁</span></button></div>
         <button id="query" class="text-button" disabled>↻ &nbsp; Atualizar estado</button>
-        <div class="auto-close"><span class="timer-icon">◷</span><div><strong>Fechamento automático</strong><p>A trava fecha 10 segundos após cada destravamento.</p></div><span class="time-pill">10s</span></div>
+        <div class="auto-close"><span class="timer-icon">◷</span><div><strong>Fechamento automático</strong><p>A trava do cofre fecha 10 segundos após cada abertura.</p></div><span class="time-pill">10s</span></div>
       </section>
       <div class="right-column">
         <section class="lcd-card"><div class="section-top"><h2>Visor do dispositivo</h2><span class="small-tag">LCD 16 × 2</span></div><div class="lcd-screen" role="img" aria-label="Resumo remoto do estado"><span id="lcd-line1">AGUARDANDO ESP32</span><span id="lcd-line2">CONECTE O PAINEL</span></div><p>Resumo remoto. A digitação da senha aparece somente no LCD do circuito.</p></section>
@@ -36,7 +36,7 @@
       <section class="activity-card"><div class="section-top"><div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Atividade recente</h2></div><button id="clear-log" class="text-button">Limpar</button></div><ol id="activity"><li class="empty-activity">Os eventos desta sessão aparecerão aqui.</li></ol></section>
       <section class="settings-card"><details><summary><span>Configuração da conexão</span><span>＋</span></summary><form id="settings"><label>Servidor WebSocket seguro<input id="broker-url" type="url" value="wss://test.mosquitto.org:8081/mqtt" required spellcheck="false"></label><label>Tópico base<input id="base-topic" value="bicicleta/ruan-bike-a73f92" required spellcheck="false" maxlength="120"></label><button class="button outline" type="submit">Salvar e reconectar ↗</button></form><p>Use o mesmo broker e tópico base do ESP32 e do aplicativo.</p></details></section>
     </div>
-    <footer><span><span class="dot"></span> Feito para explorar, construir e conectar.</span><span>Demonstração com broker público · sem autenticação da trava</span></footer>
+    <footer><span><span class="dot"></span> Feito para explorar, construir e conectar.</span><span>Demonstração com broker público · sem autenticação do cofre</span></footer>
   </main>
 </body>
 </html>
